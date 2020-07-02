@@ -32,7 +32,7 @@ https://github.com/luarocks/luarocks/wiki/Download
 #### Steps for plugin installation
 #####1.Clone the code to any directory in system
 ```
-git clone REPO_URL
+git clone https://github.com/vaibhav4981/KongCustomPlugin
 ```
 #####2.move to directory
 ```
