@@ -1,5 +1,5 @@
 
-#Kong Authorization-Blake2b custom plugin
+# Kong Authorization-Blake2b custom plugin
 
 Description
 ====================
@@ -16,7 +16,7 @@ Ths plugin has following mandatory header parameters:
 |    2    |      cfi-key     	|   text   	| Mandatory 	| UUID of Consumer                                                                                                                                                                                                                                                                                                                              	|
 |    3    |   cfi-timestamp  	|   text   	| Mandatory 	| current time in millisonds.<br>Note: It should be exact same with cfi-timestamp used to create cfi-authorization.                                                                                                                                                                                                                             	|
 
-#####Working of Plugin
+##### Working of Plugin
 It accepts 3 parameters from header that is `cfi-authorization`, `cfi-key`, `cfi-timestamp`.
 then it find cfi-apikey associated with cfi-key. if key found then it calculate blake2b hash by concatinating 3 values `cfi_key`, `cfi_timestamp`, `cfi_apikey`.
 After creating hash, we convert it into hex code and compare with header parameter `cfi-authorization`.
@@ -30,34 +30,35 @@ Plugin Installation
 https://github.com/luarocks/luarocks/wiki/Download
 
 #### Steps for plugin installation
-#####1.Clone the code to any directory in system
+
+##### 1.Clone the code to any directory in system
 ```
 git clone https://github.com/vaibhav4981/KongCustomPlugin
 ```
-#####2.move to directory
+##### 2.move to directory
 ```
 cd ./CustomPlugin
 ```
-#####3.Install Plugin
+##### 3.Install Plugin
 ```
 luarocks make kong-plugin-authorization-blake2b-1.0.0-1.rockspec
 ```
 Now, Plugin is installed but we need to enable it into kong.
 
-#####4.Enable plugin into kong. Add following line into kong.conf file and restart kong.
+##### 4.Enable plugin into kong. Add following line into kong.conf file and restart kong.
 For more details refer https://docs.konghq.com/0.10.x/plugin-development/distribution/
 ```
 plugins = bundled,authorization-blake2b
 ```
 
-#####5.Enabling the plugin on a Service
+##### 5.Enabling the plugin on a Service
 ```$xslt
 $ curl -X POST http://kong:8001/services/{service}/plugins \
     --data "name=authorization-blake2b"
 ```
 {service} is the id or name of the Service that this plugin configuration will target.
 
-#####6.Enabling the plugin on a Route
+##### 6.Enabling the plugin on a Route
 ```$xslt
 $ curl -X POST http://kong:8001/routes/{route}/plugins \
     --data "name=authorization-blake2b"
@@ -68,7 +69,7 @@ $ curl -X POST http://kong:8001/routes/{route}/plugins \
 How to use?
 ====================
 
-####1.Create a Consumer (cfi-key)
+#### 1.Create a Consumer (cfi-key)
 You need to associate a credential to an existing Consumer object. A Consumer should have only one credential.
 
 To create a Consumer, you can execute the following request:
@@ -86,7 +87,7 @@ Expected Output:
 }
 ```
 
-####2.Create cfi-apikey
+#### 2.Create cfi-apikey
 You can provision new credentials by making the following HTTP request.
 To create a cfi-apikey, you can execute the following request:
 ```$xslt
@@ -113,7 +114,7 @@ Expected Output:
 }
 ```
 
-####3.Delete cfi-apikey
+#### 3.Delete cfi-apikey
 You can delete an cfi-api Key by making the following HTTP request:
 ```$xslt
 $curl -X DELETE http://kong:8001/consumers/{consumer}/key-auth/{id}'
@@ -126,7 +127,7 @@ Example:
 $curl -X DELETE http://localhost:8001/consumers/61ab8768-e75b-491c-b297-b8703208fbf6/key-auth/031a0bd4-2387-4f5d-b8af-73d4a202c220'
 ```
 
-####4.Create dummy-Service
+#### 4.Create dummy-Service
 Create a dummy-service to test plugin.Use following HTTP request:
 ```$xslt
 $curl --location --request POST 'http://localhost:8001/services/' \
@@ -155,7 +156,7 @@ Expected Output:
     "client_certificate": null
 }
 ```
-####5.Create route
+#### 5.Create route
 Create a dummy route to test plugin.Use following HTTP request:
 ```$xslt
 $curl --location --request POST 'http://tuziaathvan.in:8001/services/dummy-service/routes' \
@@ -199,7 +200,7 @@ Expected Output:
 }
 ```
 
-####6.Enable Authorization-Blake2b to our service
+#### 6.Enable Authorization-Blake2b to our service
 When we are enabling plugin to service it automatically apply to all it's route.
 ```$xslt
 $ curl -X POST http://localhost:8001/services/dummy-service/plugins \
@@ -231,7 +232,7 @@ Expected Output:
 
 Now, We are done with the plugin installation to our dummy-service. let's test it.
 
-####7.Test the plugin
+#### 7.Test the plugin
 As mentioned in description we need 3 header parameters to raise HTTP request.
 Here Considering following parameters,
 
@@ -274,10 +275,10 @@ Expected Output:
 }
 ```
 
-####Note:
+#### Note:
 Test Code to create cfi-authorization.
 
-#####1.Save below code as test.lua
+##### 1.Save below code as test.lua
 ```$xslt
   local hasher = require 'hasher'
   local hex = require 'hex'
@@ -298,7 +299,7 @@ Test Code to create cfi-authorization.
 
 ```
 
-#####2.Install dependency required to run code
+##### 2.Install dependency required to run code
 ```$xslt
 $luarocks install hasher
 ```
@@ -309,7 +310,7 @@ $luarocks install hex
 ```
 for more details visit https://luarocks.org/modules/mah0x211/hex
 
-#####3.Run the code (Make sure that you have Lua5.1)
+##### 3.Run the code (Make sure that you have Lua5.1)
 ```$xslt
 lua test.lua
 ```
